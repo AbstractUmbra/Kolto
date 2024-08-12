@@ -1,4 +1,4 @@
-## Contributing to Kotka
+## Contributing to Kolto
 
 First off, thanks for taking the time to contribute. It makes this tool substantially better. :+1:
 

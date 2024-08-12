@@ -1,7 +1,5 @@
 /target
 **/*.rs.bk
 example_files/
-kotka-dbg
-kotka-rel
 kse/
 _*

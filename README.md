@@ -1,4 +1,4 @@
-# Kotka
+# Kolto
 
 A WIP Save Editor for Star Wars Knight of the Old Republic 1 and 2.
 
@@ -10,7 +10,7 @@ The original source code uses the [GPL v3](https://www.gnu.org/licenses/gpl-3.0.
 
 ### Contributing
 
-If you would like to contribute to Kotka, please take a look at [the contributing guidelines](./.github/CONTRIBUTING.md) and follow the procedure there.
+If you would like to contribute to Kolto, please take a look at [the contributing guidelines](./.github/CONTRIBUTING.md) and follow the procedure there.
 
 If you have any question please feel free to join my Discord server:
 
