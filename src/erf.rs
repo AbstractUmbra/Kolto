@@ -271,7 +271,7 @@ impl<'a> Erf<'a> {
         update_build: bool,
     ) -> Result<(), binrw::Error> {
         if update_build == true {
-            let now = DateTime::now().unwrap();
+            let now = DateTime::utc_now();
 
             self.metadata.build_year = now.year() as u32;
             self.metadata.build_day = now.day() as u32;
