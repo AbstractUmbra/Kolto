@@ -1,5 +1,5 @@
 /target
 **/*.rs.bk
-example_files/
+game/
 kse/
 _*
