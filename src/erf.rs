@@ -107,7 +107,7 @@ impl<'a> Erf<'a> {
 
         self_return.filename = erf_filename;
 
-        return self_return;
+        self_return
     }
 
     fn open_file(filename: &str) -> Result<File, std::io::Error> {
@@ -116,7 +116,7 @@ impl<'a> Erf<'a> {
         OpenOptions::new().read(true).open(path)
     }
 
-    pub fn load_file(&mut self, filename: &str) -> &mut Erf<'a> {
+    pub fn load_file(&mut self, filename: &str) -> &mut Self {
         let mut file = Self::open_file(filename).unwrap();
 
         for resource in self.resources.iter_mut() {
@@ -129,7 +129,7 @@ impl<'a> Erf<'a> {
             resource.is_new = false
         }
 
-        return self;
+        self
     }
 
     fn recalculate_sizing(&mut self) {
@@ -248,7 +248,7 @@ impl<'a> Erf<'a> {
         if resource.data.is_some() {
             output_file.write_le(&resource.data)
         } else {
-            let mut input_file = std::fs::File::open(&self.filename).unwrap();
+            let mut input_file = std::fs::File::open(self.filename).unwrap();
             input_file
                 .seek(SeekFrom::Start(resource.metadata.offset as u64))
                 .unwrap();
@@ -270,7 +270,7 @@ impl<'a> Erf<'a> {
         output_file: &mut File,
         update_build: bool,
     ) -> Result<(), binrw::Error> {
-        if update_build == true {
+        if update_build {
             let now = DateTime::utc_now();
 
             self.metadata.build_year = now.year() as u32;

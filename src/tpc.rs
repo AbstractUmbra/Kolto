@@ -1,6 +1,5 @@
 use crate::{Error, Result};
-use binrw::{binrw, BinRead, BinWrite, BinWriterExt};
-use bitvec::prelude::*;
+use binrw::{binrw, BinRead};
 use std::fs::File;
 use std::io::{Read, Seek};
 
@@ -49,7 +48,7 @@ impl Tpc {
 
         self_return.pixels = pixels.expect("Not a valid TPC file.");
 
-        return self_return;
+        self_return
     }
 
     fn open_file(filename: &str) -> Result<File> {
@@ -80,12 +79,12 @@ impl Tpc {
             let mut bytes2: Vec<u8> = Vec::new();
             let mut outer_idx: u8 = 0;
 
-            for idx in 0..bytes.len() {
+            for (idx, item) in bytes.iter().enumerate() {
                 if idx % 3 == 0 && idx > 0 {
                     bytes2.push(0);
                     outer_idx += 1;
                 }
-                bytes2.push(bytes[idx]);
+                bytes2.push(item.to_owned());
                 outer_idx += 1;
             }
             bytes.insert(outer_idx as usize, 0);
