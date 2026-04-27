@@ -12,7 +12,12 @@ use super::shared::RES_TYPES;
 #[derive(Debug, Eq, PartialEq)]
 struct LocalizedString {
     language_id: u32,
-    #[br(count=language_id)]
+
+    #[br(temp)]
+    #[bw(calc(string.len() as u32))]
+    string_len: u32,
+
+    #[br(count=string_len)]
     string: Vec<u8>,
 }
 
@@ -84,14 +89,24 @@ impl ErfResource {
 }
 
 #[binrw]
-#[brw(little, magic = b"ERF ")]
+#[derive(Debug, Eq, PartialEq)]
+enum ErfMagic {
+    #[brw(magic = b"ERF ")]
+    Erf,
+    #[brw(magic = b"MOD ")]
+    Mod,
+    Unknown([u8; 4]),
+}
+#[binrw]
+#[brw(little)]
 #[derive(Debug, Eq, PartialEq)]
 pub struct Erf<'a> {
+    magic: ErfMagic,
     #[brw(ignore)]
     filename: &'a str,
     version: [u8; 4],
     metadata: ErfMetadata,
-    #[br(seek_before = SeekFrom::Start(metadata.offset_to_localized_string as u64), count=metadata.localized_string_count)]
+    #[br(seek_before = SeekFrom::Start(metadata.offset_to_localized_string as u64),count=metadata.localized_string_count)]
     localised_strings: Vec<LocalizedString>,
     #[br(seek_before = SeekFrom::Start(metadata.offset_to_key_list as u64), count=metadata.entry_count, args { inner: (version, metadata.offset_to_resource_list) })]
     #[bw(args(*version, metadata.offset_to_key_list))]
@@ -103,7 +118,8 @@ impl<'a> Erf<'a> {
     pub fn new(erf_filename: &'a str) -> Self {
         let mut buffer = Self::open_file(erf_filename).unwrap();
 
-        let mut self_return = Self::read(&mut buffer).unwrap();
+        let mut self_return = Self::read(&mut buffer)
+            .expect(&format!("Unable to read '{}' as ERF file.", erf_filename));
 
         self_return.filename = erf_filename;
 
@@ -204,7 +220,7 @@ impl<'a> Erf<'a> {
         }
     }
 
-    pub fn get_resources_by_type(self, resource_type: &str) -> Vec<u32> {
+    pub fn get_resources_by_type(&self, resource_type: &str) -> Vec<u32> {
         let mut resources: Vec<u32> = Vec::new();
 
         for key in self.resources.iter() {
