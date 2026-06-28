@@ -1,5 +1,5 @@
 use std::io::Error as IoError;
-use thiserror::Error; // Bring the `Error` derive macro into scope
+use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum Error {

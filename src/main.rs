@@ -1,4 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
+
 mod bif;
 mod erf;
 mod error;
@@ -24,7 +25,7 @@ fn main() {
     // let bif = Bif::new(&mut installation_path, None, None).unwrap();
     // println!("{:#?}", bif);
 
-    let erf = Erf::new("game/kotor1/patch.erf");
+    let erf = Erf::new("game/kotor2/cloudsaves/126043026/000002 - Game1/SAVEGAME.sav");
     println!("{:#?}", erf);
 
     // let tlk = Tlk::new("").unwrap();
